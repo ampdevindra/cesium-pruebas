@@ -1,0 +1,67 @@
+<section
+  class="mapa"
+  [class.sin-logo]="!logoVisible()"
+  [class.sin-widgets]="!widgetsVisibles()"
+  [class.ver-origen]="verOrigen()">
+
+  <!-- BOTONES DE CAPAS: arriba a la izquierda. Cada botón muestra u oculta una capa. -->
+  <nav class="mapa-capas" data-origen="PROPIO · botones de capas (HTML + CSS + Angular)">
+    <button
+      type="button"
+      [class.activo]="acoVisible()"
+      (click)="onBotonAcoPulsado()">ACO</button>
+    <button
+      type="button"
+      [class.activo]="amenazasVisibles()"
+      (click)="onBotonAmenazasPulsado()">Amenazas</button>
+    <button
+      type="button"
+      [class.activo]="rutasVisibles()"
+      (click)="onBotonRutasPulsado()">Rutas</button>
+  </nav>
+
+  <!-- MAPA DE FONDO: debajo de los botones de capas. Para probar qué fondo se parece más a la captura. -->
+  <nav class="mapa-fondos" data-origen="PROPIO · selector de fondo">
+    <button
+      type="button"
+      [class.activo]="fondoActivo() === 'osm'"
+      (click)="onBotonFondoOsmPulsado()">OSM oscurecido</button>
+    <button
+      type="button"
+      [class.activo]="fondoActivo() === 'cartoSinTexto'"
+      (click)="onBotonFondoCartoSinTextoPulsado()">CARTO sin texto (pide clave)</button>
+    <button
+      type="button"
+      [class.activo]="fondoActivo() === 'cartoConTexto'"
+      (click)="onBotonFondoCartoConTextoPulsado()">CARTO con texto (pide clave)</button>
+    <button
+      type="button"
+      [class.activo]="fondoActivo() === 'esri'"
+      (click)="onBotonFondoEsriPulsado()">Esri gris oscuro</button>
+  </nav>
+
+  <!-- BOTÓN DE VISTA: arriba a la derecha. Cambia entre mapa plano (2D) y globo (3D). -->
+  <nav class="mapa-vista" data-origen="PROPIO · botones de vista">
+    <button type="button" [class.activo]="widgetsVisibles()" (click)="onBotonWidgetsPulsado()">Widgets Cesium</button>
+    <button type="button" [class.activo]="logoVisible()" (click)="onBotonLogoCesiumPulsado()">Logo Cesium</button>
+    <button type="button" [class.activo]="verOrigen()" (click)="onBotonVerOrigenPulsado()">Ver origen</button>
+    <button type="button" (click)="onBotonModoVistaPulsado()">{{ modo3d() ? '2D' : '3D' }}</button>
+  </nav>
+
+  <!-- LEYENDA DE ORIGEN: solo se ve con "Ver origen" pulsado. Es propia, sirve para aprender. -->
+  @if (verOrigen()) {
+    <aside class="mapa-leyenda">
+      <strong>¿De quién es cada cosa?</strong>
+      <span class="verde">VERDE = propio (Angular, HTML y CSS nuestros): botones de capas, botones de vista y esta leyenda.</span>
+      <span class="rojo">ROJO = de Cesium: el mapa entero (fondo, zoom, arrastrar), la barra de botones de arriba a la derecha, el reloj, la línea de tiempo y los créditos de abajo.</span>
+      <span class="naranja">Dentro del mapa rojo, las zonas, la línea, los puntos y sus textos las dibuja Cesium, pero con NUESTROS datos (métodos dibujarCapa... del .ts).</span>
+      <span class="gris">GRIS = widgets de Cesium que siguen DESACTIVADOS en crearVisor porque necesitan un token de Cesium Ion y darían errores sin él:</span>
+      <span class="gris">· geocoder: buscador de lugares (escribes un sitio y vuela hasta él).</span>
+      <span class="gris">· baseLayerPicker: selector de mapas de fondo y de terreno (satélite, calles...).</span>
+    </aside>
+  }
+
+  <!-- MAPA: aquí dentro Cesium dibuja todo (fondo, zonas, ruta...). Ocupa toda la pantalla. -->
+  <div #contenedorMapa class="mapa-lienzo"></div>
+
+</section>

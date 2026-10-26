@@ -1,0 +1,69 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+div.pagina {
+  background: #1a1a1a;
+  box-sizing: border-box;
+  display: grid;
+  gap: 8px;
+  grid-template-areas:
+    'cabecera cabecera'
+    'menu contenido';
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 56px 1fr;
+  height: 100%;
+  padding: 8px;
+
+  // Los cuatro recuadros comparten el mismo aspecto: fondo negro y borde fino
+  header.pagina-cabecera,
+  aside.pagina-menu,
+  section.pagina-titulo,
+  section.pagina-mapa {
+    background: #000;
+    border: 1px solid #2e2e2e;
+    border-radius: 6px;
+  }
+
+  header.pagina-cabecera {
+    grid-area: cabecera;
+  }
+
+  aside.pagina-menu {
+    grid-area: menu;
+  }
+
+  main.pagina-contenido {
+    display: grid;
+    gap: 8px;
+    grid-area: contenido;
+    grid-template-rows: 48px 1fr;
+    min-height: 0; // sin esto el mapa empujaría la página y se saldría de la pantalla
+    min-width: 0;
+  }
+
+  section.pagina-mapa {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  span.pagina-etiqueta {
+    color: #5a5a5a;
+    display: block;
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  // Pantallas estrechas: se esconde el menú lateral y el mapa ocupa todo el ancho
+  @media (max-width: 800px) {
+    grid-template-areas:
+      'cabecera'
+      'contenido';
+    grid-template-columns: 1fr;
+
+    aside.pagina-menu {
+      display: none;
+    }
+  }
+}

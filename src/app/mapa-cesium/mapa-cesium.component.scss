@@ -1,0 +1,164 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+section.mapa {
+  height: 100%;
+  position: relative;
+
+  // Estilo común de todos los botones (los de capas y el de vista)
+  nav button {
+    background: rgb(10 20 35 / 85%);
+    border: 1px solid #2c4a66;
+    border-radius: 4px;
+    color: #9db8d0;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 6px 14px;
+
+    // Botón de capa encendida
+    &.activo {
+      background: #16486b;
+      border-color: #3fb8e8;
+      color: #fff;
+    }
+  }
+
+  // Posición de los botones de capas: arriba a la izquierda
+  nav.mapa-capas {
+    display: flex;
+    gap: 8px;
+    left: 12px;
+    position: absolute;
+    top: 12px;
+    z-index: 1;
+  }
+
+  // Posición de los botones de fondo: justo debajo de los de capas
+  nav.mapa-fondos {
+    display: flex;
+    flex-wrap: wrap; // en un recuadro estrecho los botones pasan a otra fila en vez de pisarse
+    gap: 8px;
+    left: 12px;
+    position: absolute;
+    right: 200px; // deja libre la esquina derecha, donde están los botones de vista
+    top: 56px;
+    z-index: 1;
+  }
+
+  // Posición del botón 2D/3D: arriba a la derecha
+  nav.mapa-vista {
+    display: flex;
+    gap: 8px;
+    position: absolute;
+    right: 12px;
+    // Más abajo que la barra de widgets de Cesium, que ocupa la esquina de arriba a la derecha
+    top: 56px;
+    z-index: 1;
+  }
+
+  .mapa-lienzo {
+    height: 100%;
+  }
+
+  // Botón "Widgets Cesium" apagado: se esconden los widgets de Cesium (los créditos se quedan, son obligatorios)
+  &.sin-widgets .mapa-lienzo ::ng-deep {
+    .cesium-infoBox,
+    .cesium-viewer-animationContainer,
+    .cesium-viewer-fullscreenContainer,
+    .cesium-viewer-timelineContainer,
+    .cesium-viewer-toolbar {
+      display: none;
+    }
+  }
+
+  // Botón "Logo Cesium" apagado: se esconde solo el logo; el texto "Data attribution" se queda
+  // (!important porque Cesium escribe display: inline en el propio elemento y ganaría al CSS)
+  &.sin-logo .mapa-lienzo ::ng-deep .cesium-credit-logoContainer {
+    display: none !important;
+  }
+
+  // Leyenda del modo "Ver origen"
+  aside.mapa-leyenda {
+    background: rgb(10 20 35 / 92%);
+    border: 1px solid #2c4a66;
+    border-radius: 4px;
+    color: #dbe7f2;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    gap: 8px;
+    left: 12px;
+    max-width: 420px;
+    padding: 12px;
+    position: absolute;
+    top: 108px;
+    z-index: 2;
+
+    .verde { color: #4dff88; }
+    .rojo { color: #ff6b6b; }
+    .naranja { color: #ffb347; }
+    .gris { color: #aab4be; }
+  }
+
+  // Modo "Ver origen": rodea cada zona con un color y le pone una etiqueta de texto
+  &.ver-origen {
+    // Verde: lo propio
+    nav.mapa-capas,
+    nav.mapa-fondos,
+    nav.mapa-vista {
+      outline: 3px dashed #4dff88;
+      outline-offset: 4px;
+
+      &::after {
+        background: #4dff88;
+        color: #000;
+        content: attr(data-origen);
+        font-size: 11px;
+        font-weight: 700;
+        left: 0;
+        padding: 2px 6px;
+        position: absolute;
+        top: calc(100% + 10px);
+        white-space: nowrap;
+      }
+    }
+
+    // El de la derecha se ancla a su borde derecho para no salirse de la pantalla
+    nav.mapa-vista::after {
+      left: auto;
+      right: 0;
+    }
+
+    // Rojo: lo de Cesium (el mapa y los créditos de abajo)
+    .mapa-lienzo {
+      outline: 4px solid #ff4d4d;
+      outline-offset: -4px;
+    }
+
+    // Widgets de Cesium: barra de botones, reloj y línea de tiempo
+    .mapa-lienzo ::ng-deep .cesium-viewer-toolbar,
+    .mapa-lienzo ::ng-deep .cesium-viewer-animationContainer,
+    .mapa-lienzo ::ng-deep .cesium-viewer-timelineContainer {
+      outline: 3px solid #ff4d4d;
+      outline-offset: 2px;
+    }
+
+    .mapa-lienzo ::ng-deep .cesium-viewer-bottom {
+      outline: 3px solid #ff4d4d;
+
+      &::before {
+        background: #ff4d4d;
+        color: #000;
+        content: 'CESIUM · créditos (logo y OpenStreetMap)';
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 6px;
+        position: absolute;
+        right: 0;
+        top: -22px;
+      }
+    }
+  }
+}
