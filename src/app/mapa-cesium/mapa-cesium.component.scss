@@ -42,9 +42,17 @@ section.mapa {
     gap: 8px;
     left: 12px;
     position: absolute;
-    right: 200px; // deja libre la esquina derecha, donde están los botones de vista
+    right: 440px; // deja libre la esquina derecha, donde están los botones de vista
     top: 56px;
     z-index: 1;
+  }
+
+  // Recuadro estrecho: los botones de fondo bajan a su propia fila para no pisar los de la derecha
+  @media (max-width: 800px) {
+    nav.mapa-fondos {
+      right: 12px;
+      top: 100px;
+    }
   }
 
   // Posición del botón 2D/3D: arriba a la derecha
@@ -69,7 +77,7 @@ section.mapa {
     .cesium-viewer-fullscreenContainer,
     .cesium-viewer-timelineContainer,
     .cesium-viewer-toolbar {
-      display: none;
+      display: none !important; // Cesium escribe display en algunos de estos elementos y ganaría al CSS
     }
   }
 
@@ -93,7 +101,7 @@ section.mapa {
     max-width: 420px;
     padding: 12px;
     position: absolute;
-    top: 108px;
+    top: 150px;
     z-index: 2;
 
     .verde { color: #4dff88; }
